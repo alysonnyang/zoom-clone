@@ -16,6 +16,14 @@ const server = http.createServer(app); //creating a server from an express appli
 const wss = new WebSocket.Server({server}); //pasisng the server 
 //running http & ws server together (NOT REQUIRED)
 
+wss.on("connection",(socket)=>{
+    console.log("Connected to the Browser ✅");
+    //socket = browser that connected
+    socket.on("close",() => console.log("Disconnected from the Browser ❌"));
+    
+    socket.send("hello!!!");
+})
+
 server.listen(3000,handleListen);
 
 //app.listen(3000, handleListen);
