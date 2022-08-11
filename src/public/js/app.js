@@ -1,5 +1,6 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
+const nickForm = document.querySelector("#nickname")
+const messageForm = document.querySelector("#message");
 const socket = new WebSocket(`ws://${window.location.host}`);
 //creates a socket for the frontend allowing bi-directional communication with the server
 //socket = connection to the server
@@ -9,7 +10,9 @@ socket.addEventListener("open",()=> {
 });
 
 socket.addEventListener("message", (message)=>{
-    console.log("New Message:",message.data);
+    const li = document.createElement("li");
+    li.innerText = message.data;
+    messageList.append(li);
 });
 
 socket.addEventListener("close",()=> {
@@ -23,4 +26,11 @@ function handleSubmit(event){
     input.value = "";
 }
 
+function handleNickSubmit(event){
+    event.preventDefault();
+    const input = nickForm.querySelector("input");
+    socket.send(input.value);
+}
+
 messageForm.addEventListener("submit", handleSubmit)
+nickForm.addEventListener("submit", handleNickSubmit)

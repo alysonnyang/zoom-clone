@@ -16,17 +16,17 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app); //creating a server from an express application
 const wss = new WebSocket.Server({server}); //pasisng the server 
 //running http & ws server together (NOT REQUIRED)
-
+const sockets = [];
 
 wss.on("connection",(socket)=>{
     sockets.push(socket);
     console.log("Connected to the Browser ✅");
     //socket = browser that connected
     socket.on("message",(message) => {
-        socket.send(message.toString('utf8'));
+        sockets.forEach(aSocket => aSocket.send(message.toString('utf8')));
     });
     socket.on("close",() => console.log("Disco nnected from the Browser ❌"));
-    socket.send("hello!!!");
+
 })
 
 server.listen(3000,handleListen);
