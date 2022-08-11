@@ -1,6 +1,7 @@
 import http from "http";
 import WebSocket from "ws";
 import express from "express";
+import { stringify } from "querystring";
 
 const app = express();
 
@@ -16,11 +17,15 @@ const server = http.createServer(app); //creating a server from an express appli
 const wss = new WebSocket.Server({server}); //pasisng the server 
 //running http & ws server together (NOT REQUIRED)
 
+
 wss.on("connection",(socket)=>{
+    sockets.push(socket);
     console.log("Connected to the Browser ✅");
     //socket = browser that connected
-    socket.on("close",() => console.log("Disconnected from the Browser ❌"));
-    
+    socket.on("message",(message) => {
+        socket.send(message.toString('utf8'));
+    });
+    socket.on("close",() => console.log("Disco nnected from the Browser ❌"));
     socket.send("hello!!!");
 })
 
