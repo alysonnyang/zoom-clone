@@ -5,6 +5,11 @@ const socket = new WebSocket(`ws://${window.location.host}`);
 //creates a socket for the frontend allowing bi-directional communication with the server
 //socket = connection to the server
 
+function makeMessage(type,payload){
+    const msg = {type,payload};
+    return JSON.stringify(msg);
+}
+
 socket.addEventListener("open",()=> {
     console.log("Connected to the Server ✅");
 });
@@ -22,14 +27,14 @@ socket.addEventListener("close",()=> {
 function handleSubmit(event){
     event.preventDefault();
     const input = messageForm.querySelector("input");
-    socket.send(input.value);
+    socket.send(makeMessage("new_message",input.value));
     input.value = "";
 }
 
 function handleNickSubmit(event){
     event.preventDefault();
     const input = nickForm.querySelector("input");
-    socket.send(input.value);
+    socket.send(makeMessage("nickname",input.value));
 }
 
 messageForm.addEventListener("submit", handleSubmit)
